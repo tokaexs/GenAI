@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MoodScape - AI Micro-Therapy</title>
+    <script>
+        // On page load, set the theme before the rest of the page loads to prevent flashing.
+        // Set light/dark mode
+        if (localStorage.theme === 'light') {
+            document.documentElement.classList.remove('dark');
+        } else {
+            document.documentElement.classList.add('dark');
+        }
+
+        // Set visual theme
+        const visualTheme = localStorage.getItem('visualTheme') || 'aurora';
+        document.documentElement.classList.add(`theme-${visualTheme}`);
+    </script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+        }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            transition: background-color 0.5s ease, background-image 0.5s ease;
+        }
+        
+        /* --- Base Element Styling --- */
+        .main-cta-button {
+             @apply w-full max-w-md mx-auto bg-gradient-to-r from-cyan-500 to-fuchsia-600 hover:from-cyan-400 hover:to-fuchsia-500 text-white font-extrabold py-4 px-8 rounded-full text-lg transition-all duration-300 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3 transform hover:scale-105 disabled:hover:scale-100 shadow-lg hover:shadow-cyan-500/50 dark:hover:shadow-cyan-400/30;
+             position: relative;
+             overflow: hidden;
+        }
+
+        .main-cta-button::after, .gradient-button-shine::after {
+            content: '';
+            position: absolute;
+            top: -100%;
+            left: 0;
+            width: 50%;
+            height: 300%;
+            background: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.4) 50%, rgba(255, 255, 255, 0) 100%);
+            opacity: 0.6;
+            transform: translateX(-100%) rotate(30deg);
+            transition: transform 0.6s ease;
+        }
+
+        .main-cta-button:not(:disabled):hover::after, .gradient-button-shine:not(:disabled):hover::after {
+             transform: translateX(300%) rotate(30deg);
+        }
+        
+        /* --- Theme: Aurora (Default) --- */
+        .theme-aurora body {
+            background-color: #f8fafc; /* slate-50 */
+        }
+        .theme-aurora.dark body {
+            background-color: #0d1120; /* Darker blue */
+            background-image:
+                radial-gradient(at 27% 37%, hsla(215, 98%, 61%, 0.12) 0px, transparent 50%),
+                radial-gradient(at 97% 21%, hsla(125, 98%, 72%, 0.1) 0px, transparent 50%),
+                radial-gradient(at 52% 99%, hsla(355, 98%, 76%, 0.15) 0px, transparent 50%),
+                radial-gradient(at 10% 29%, hsla(256, 96%, 68%, 0.12) 0px, transparent 50%),
+                radial-gradient(at 97% 96%, hsla(38, 60%, 74%, 0.1) 0px, transparent 50%),
+                radial-gradient(at 33% 50%, hsla(222, 67%, 73%, 0.1) 0px, transparent 50%),
+                radial-gradient(at 79% 53%, hsla(343, 68%, 79%, 0.12) 0px, transparent 50%);
+            animation: aurora-animation 20s infinite alternate;
+        }
+
+        /* --- Theme: Forest --- */
+        .theme-forest body {
+            background-color: #f7fee7; /* lime-50 */
+        }
+        .theme-forest.dark body {
+            background-color: #1c241c; /* Dark green */
+            background-image:
+                radial-gradient(at 15% 85%, hsla(140, 50%, 40%, 0.25) 0px, transparent 50%),
+                radial-gradient(at 80% 20%, hsla(100, 40%, 50%, 0.18) 0px, transparent 50%),
+                radial-gradient(at 50% 50%, hsla(120, 30%, 60%, 0.15) 0px, transparent 50%);
+            animation: aurora-animation 25s infinite alternate;
+        }
+
+        /* --- Theme: Ocean --- */
+        .theme-ocean body {
+            background-color: #f0f9ff; /* sky-50 */
+        }
+        .theme-ocean.dark body {
+            background-color: #0c1425; /* Darker slate */
+            background-image:
+                radial-gradient(at 50% 0%, hsla(200, 80%, 50%, 0.22) 0px, transparent 50%),
+                radial-gradient(at 10% 90%, hsla(210, 70%, 60%, 0.22) 0px, transparent 50%),
+                radial-gradient(at 90% 90%, hsla(190, 60%, 50%, 0.22) 0px, transparent 50%);
+            animation: aurora-animation 15s infinite alternate;
+        }
+
+        /* --- Theme: Night Sky --- */
+        .theme-nightsky body {
+            background-color: #faf5ff; /* purple-50 */
+        }
+        .theme-nightsky.dark body {
+            background-color: #110f1e;
+            background-image:
+                radial-gradient(ellipse at 50% 50%, rgba(255, 255, 255, 0.07) 0%, transparent 100%),
+                radial-gradient(at 20% 10%, hsla(240, 50%, 70%, 0.18) 0px, transparent 50%),
+                radial-gradient(at 80% 90%, hsla(280, 50%, 60%, 0.18) 0px, transparent 50%);
+            animation: aurora-animation 30s infinite alternate;
+        }
+
+        .glassmorphism {
+            background: rgba(255, 255, 255, 0.65);
+            backdrop-filter: blur(24px) saturate(150%);
+            -webkit-backdrop-filter: blur(24px) saturate(150%);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        .dark .glassmorphism {
+            background: rgba(15, 23, 42, 0.6); /* slate-900 with opacity */
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .animate-fade-in {
+            animation: fade-in 0.5s ease-in-out forwards;
+        }
+        .animate-fade-in-up {
+            animation: fade-in-up 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+            opacity: 0;
+        }
+        .animate-modal-scale-in {
+            animation: modal-scale-in 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        @keyframes fade-in {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes fade-in-up {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes modal-scale-in {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes kenburns {
+            0% { transform: scale(1.05) translate(0, 0); }
+            50% { transform: scale(1.15) translate(-1%, 1%); }
+            100% { transform: scale(1.05) translate(0, 0); }
+        }
+        @keyframes aurora-animation {
+            from {
+                background-position: 0% 50%, 0% 50%, 0% 50%, 0% 50%, 0% 50%, 0% 50%, 0% 50%;
+            }
+            to {
+                background-position: 100% 50%, 100% 50%, 100% 50%, 100% 50%, 100% 50%, 100% 50%, 100% 50%;
+            }
+        }
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+            100% { transform: translateY(0px); }
+        }
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border-width: 0;
+        }
+
+        /* Accessibility: Reduce motion */
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
+            .theme-aurora.dark body, .theme-forest.dark body, .theme-ocean.dark body, .theme-nightsky.dark body {
+                animation: none;
+            }
+            [style*="animation: kenburns"], [style*="animation: float"] {
+                 animation: none !important;
+            }
+        }
+    </style>
+<script type="importmap">
+{
+  "imports": {
+    "react/": "https://aistudiocdn.com/react@^19.1.1/",
+    "react": "https://aistudiocdn.com/react@^19.1.1",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.1.1/",
+    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.17.0"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+<body class="text-slate-900 dark:text-slate-100 bg-slate-50">
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+</body>
+</html>
